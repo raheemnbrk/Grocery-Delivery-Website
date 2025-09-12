@@ -1,11 +1,14 @@
 import { useParams } from "react-router-dom"
 
 import { dummyProducts , assets } from "../assets/assets"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { AppContext } from "../context/appContext"
 
 export default function Product() {
     const { id } = useParams()
     const product = dummyProducts.find(ele => ele._id === id)
+
+    const {addToCart} = useContext(AppContext)
 
     const [thumbnail, setThumbnail] = useState(product.image[0])
     console.log(product)
@@ -61,7 +64,7 @@ export default function Product() {
                     </ul>
 
                     <div className="flex items-center mt-10 gap-4 text-base">
-                        <button className="w-full py-3.5 cursor-pointer font-medium bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition" >
+                        <button onClick={()=>addToCart(product._id)} className="w-full py-3.5 cursor-pointer font-medium bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition" >
                             Add to Cart
                         </button>
                         <button className="w-full py-3.5 cursor-pointer font-medium bg-primary text-white hover:bg-primary-dull transition" >

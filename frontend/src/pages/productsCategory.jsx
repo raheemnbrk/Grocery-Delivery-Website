@@ -20,7 +20,7 @@ export default function ProductsCategory() {
             {filteredProducts && (
                 <div className="flex flex-wrap gap-6 items-center justify-center lg:justify-start" >
                     {filteredProducts.map(ele => (
-                        <Link key={ele._id} >
+                       <Link key={ele._id} to={`/products/${product.category}/${product._id}`} >
                             <ProductsCard product={ele} />
                         </Link>
                     ))}

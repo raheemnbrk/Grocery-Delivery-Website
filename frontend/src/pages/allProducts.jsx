@@ -9,9 +9,9 @@ export default function AllProducts() {
                 <h1 className="text-2xl font-semibold uppercase" >all products</h1>
                 <div className="w-16 h-0.5 bg-primary rounded-full" ></div>
             </div>
-            <div className="flex flex-wrap gap-6" >
+            <div className="flex flex-wrap gap-6 items-center justify-center lg:justify-start" >
                 {dummyProducts.map(product => (
-                    <Link to={`/products/${product.category}`} key={product._id}  >
+                    <Link to={`/products/${product.category}/${product._id}`} key={product._id}  >
                         <ProductsCard product={product} />
                     </Link>
                 ))}

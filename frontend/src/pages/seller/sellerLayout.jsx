@@ -23,10 +23,10 @@ export default function Layout() {
                 </div>
             </div>
 
-            <div>
+            <div className="flex" >
                 <div className="md:w-64 w-16 border-r h-[550px] text-base border-gray-300 pt-4 flex flex-col">
                     {sidebarLinks.map((item, index) => (
-                        <NavLink to={item.path} key={index} end={item.path === "seller"}
+                        <NavLink to={item.path} key={index} end={item.path === "/seller"}
                             className={({isActive}) => `flex items-center py-3 px-4 gap-3 
                             ${isActive ? "border-r-4 md:border-r-[6px] bg-primary/10 border-text-primary text-primary"
                                     : "hover:bg-gray-100/90 border-white0"

@@ -5,7 +5,7 @@ import { AppContext } from "../context/appContext"
 
 export default function NavBar() {
     const [open, setOpen] = useState(false)
-    const [logged, setLogged] = useState(false)
+    const [logged, setLogged] = useState(!false)
     const { setShowUserLogin, navigate } = useContext(AppContext)
 
     const logOut = async () => {

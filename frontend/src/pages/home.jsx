@@ -6,7 +6,7 @@ import NewsLetter from "../components/newsLetter"
 
 export default function Home(){
     return(
-        <div className="py-10 flex flex-col space-y-16">
+        <div className="flex flex-col space-y-16">
          <MainBanner/>
          <Categories/>
          <BestSeller/>

@@ -58,6 +58,7 @@ import leaf_icon from "../assets/images/leaf_icon.svg";
 import coin_icon from "../assets/images/coin_icon.svg";
 import box_icon from "../assets/images/box_icon.svg";
 import trust_icon from "../assets/images/trust_icon.svg";
+import add_address_iamge from "../assets/images/add_address_image.svg";
 
 export const assets = {
     logo ,
@@ -70,7 +71,8 @@ export const assets = {
     star_icon ,
     star_dull_icon ,
     bottom_banner_image ,
-    bottom_banner_image_sm
+    bottom_banner_image_sm , 
+    add_address_iamge
 }
 
 export const features = [
