@@ -5,6 +5,7 @@ import connectDb from "./configs/db.mjs"
 import "dotenv/config"
 
 import userRouter from "./routes/userRoute.mjs"
+import sellerRouter from "./routes/sellerRoute.mjs"
 
 const app = express()
 
@@ -25,7 +26,8 @@ app.get("/", (req, res) => {
     res.send("api is working")
 })
 
-app.use('/api/user' , userRouter)
+app.use('/api/user', userRouter)
+app.use('/api/seller', sellerRouter)
 
 app.listen(port, () => {
     console.log("server is running on port 4000")
