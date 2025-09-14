@@ -6,6 +6,8 @@ import "dotenv/config"
 
 import userRouter from "./routes/userRoute.mjs"
 import sellerRouter from "./routes/sellerRoute.mjs"
+import connectCloudinary from "./configs/cloudinary.mjs"
+import productRouter from "./routes/productRoute.mjs"
 
 const app = express()
 
@@ -21,6 +23,7 @@ app.use(cors({
 }))
 
 await connectDb()
+await connectCloudinary()
 
 app.get("/", (req, res) => {
     res.send("api is working")
@@ -28,6 +31,7 @@ app.get("/", (req, res) => {
 
 app.use('/api/user', userRouter)
 app.use('/api/seller', sellerRouter)
+app.use('/api/product' , productRouter)
 
 app.listen(port, () => {
     console.log("server is running on port 4000")

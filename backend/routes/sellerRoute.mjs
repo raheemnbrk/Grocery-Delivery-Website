@@ -1,6 +1,7 @@
 import express from "express"
 import { sellerIsAuth, sellerLogin, sellerLogout } from "../controllers/sellerController.mjs"
 import authSeller from "../middlewares/authSeller.mjs"
+import { addProduct } from "../controllers/productController.mjs"
 
 const sellerRouter = express.Router()
 
