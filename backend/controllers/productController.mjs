@@ -21,4 +21,39 @@ const addProduct = async (req, res) => {
     }
 }
 
-export {addProduct}
+const productlist = async (req, res) => {
+    try {
+        const products = await Product.find({})
+        res.json({ success: true, products })
+    }
+    catch (err) {
+        console.log(err)
+        res.json({ success: false, message: err.message })
+    }
+}
+
+const productById = async (req, res) => {
+    try {
+        const { id } = req.body
+        const product = await Product.findById(id)
+        res.json({ success: true, product })
+    }
+    catch (err) {
+        console.log(err)
+        res.json({ success: false, message: err.message })
+    }
+}
+
+const changeStock = async (req, res) => {
+    try {
+        const { id , inStock } = req.body
+        const product = await Product.findByIdAndUpdate(id, { inStock })
+        res.json({success : true , message : "stcok updated."}) 
+    }
+    catch (err) {
+        console.log(err)
+        res.json({ success: false, message: err.message })
+    }
+}
+
+export { addProduct, productlist, productById , changeStock }
