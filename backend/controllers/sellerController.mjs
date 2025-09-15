@@ -19,7 +19,7 @@ const sellerLogin = async (req, res) => {
             res.json({ success: true, message: "logged in" })
         }
         else {
-            res.json({ success: true, message: "invalid credentiels" })
+            res.json({ success: false, message: "invalid credentiels" })
         }
     }
     catch (err) {
@@ -43,7 +43,7 @@ const sellerLogout = async (req, res) => {
         res.clearCookie('sellerToken', {
             httpOnly: true,
             sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-            secure: process.env.NODE_ENV
+            secure: process.env.NODE_ENV === "production"
         })
         res.json({ success: true, message: "logged out successfully." })
     }

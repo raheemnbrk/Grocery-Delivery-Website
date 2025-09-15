@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"
+
+axios.defaults.withCredentials = true
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
 
 import { dummyProducts, categories } from "../assets/assets";
 
@@ -11,7 +15,7 @@ export const AppContext = createContext()
 export const AppContextProvider = ({ children }) => {
   const [showUserLogin, setShowUserLogin] = useState(false)
   const [cartItems, setCartItems] = useState({})
-  const [isSeller  , setIsSeller] = useState(!false)
+  const [isSeller, setIsSeller] = useState(false)
 
   const addToCart = (itemId) => {
     let cartData = structuredClone(cartItems)
@@ -44,6 +48,25 @@ export const AppContextProvider = ({ children }) => {
     toast.success("removed from cart.")
   }
 
+  const fetchSeller = async () => {
+    try {
+      const { data } = await axios.get('/api/seller/sellerIsAuth')
+      if (data.success) {
+        setIsSeller(true)
+      }
+      else {
+        setIsSeller(false)
+      }
+    }
+    catch (err) {
+      setIsSeller(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchSeller()
+  } , [])
+
   const navigate = useNavigate()
   const value = {
     showUserLogin,
@@ -51,8 +74,8 @@ export const AppContextProvider = ({ children }) => {
     navigate,
     cartItems, setCartItems,
     addToCart, updateCart, removeFromcart,
-    dummyProducts, categories ,
-    isSeller  , setIsSeller
+    dummyProducts, categories,
+    isSeller, setIsSeller, axios
   }
   return <AppContext.Provider value={value} >
     {children}
