@@ -6,7 +6,7 @@ import axios from "axios"
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
 
-import { dummyProducts, categories } from "../assets/assets";
+import { categories } from "../assets/assets";
 
 import toast from "react-hot-toast";
 
@@ -14,8 +14,24 @@ export const AppContext = createContext()
 
 export const AppContextProvider = ({ children }) => {
   const [showUserLogin, setShowUserLogin] = useState(false)
+  const [products , setProducts] = useState([])
   const [cartItems, setCartItems] = useState({})
   const [isSeller, setIsSeller] = useState(false)
+
+  const getProducts = async () => {
+    try {
+      const { data } = await axios.get('/api/product/productList')
+      if (data.success) {
+         setProducts(data.products) 
+      }
+      else{
+        toast.err(err.message)
+      }
+    }
+    catch (err) {
+      toast.error(err.message)
+    }
+  }
 
   const addToCart = (itemId) => {
     let cartData = structuredClone(cartItems)
@@ -65,7 +81,7 @@ export const AppContextProvider = ({ children }) => {
 
   useEffect(() => {
     fetchSeller()
-  } , [])
+  }, [])
 
   const navigate = useNavigate()
   const value = {
@@ -74,7 +90,7 @@ export const AppContextProvider = ({ children }) => {
     navigate,
     cartItems, setCartItems,
     addToCart, updateCart, removeFromcart,
-    dummyProducts, categories,
+    products , getProducts, categories,
     isSeller, setIsSeller, axios
   }
   return <AppContext.Provider value={value} >

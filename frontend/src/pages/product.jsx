@@ -1,17 +1,17 @@
 import { useParams } from "react-router-dom"
 
-import { dummyProducts , assets } from "../assets/assets"
+import { assets } from "../assets/assets"
 import { useContext, useState } from "react"
 import { AppContext } from "../context/appContext"
 
 export default function Product() {
     const { id } = useParams()
-    const product = dummyProducts.find(ele => ele._id === id)
 
-    const {addToCart} = useContext(AppContext)
+    const {addToCart , products} = useContext(AppContext)
+
+    const product = products.find(ele => ele._id === id)
 
     const [thumbnail, setThumbnail] = useState(product.image[0])
-    console.log(product)
     return (
         <div className="max-w-6xl w-full px-6">
             <p>

@@ -3,11 +3,11 @@ import { v2 as cloudinary } from "cloudinary"
 
 const addProduct = async (req, res) => {
     try {
-        let productData = req.body
+        let productData = JSON.parse(req.body.productdata)
         const images = req.files
         let images_url = await Promise.all(
             images.map(async (item) => {
-                let result = await cloudinary.uploader.upload(item.path, { ressource_type: "image" })
+                let result = await cloudinary.uploader.upload(item.path, { resource_type: "image" })
                 return result.secure_url
             })
         )

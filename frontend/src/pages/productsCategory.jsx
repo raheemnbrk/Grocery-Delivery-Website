@@ -4,11 +4,11 @@ import { Link, useParams } from "react-router-dom"
 import ProductsCard from "../components/productsCard"
 
 export default function ProductsCategory() {
-    const { dummyProducts, categories } = useContext(AppContext)
+    const { products, categories } = useContext(AppContext)
     const { category } = useParams()
 
     const searchedcategory = categories.find(ele => ele.path === category)
-    const filteredProducts = dummyProducts.filter(ele => ele.category === category)
+    const filteredProducts = products.filter(ele => ele.category === category)
     return (
         <div className="flex flex-col gap-6" >
             {searchedcategory && (

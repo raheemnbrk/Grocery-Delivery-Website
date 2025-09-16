@@ -3,6 +3,9 @@ import { LuListCheck } from "react-icons/lu";
 import { AiOutlineDeliveredProcedure } from "react-icons/ai";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { assets } from "../../assets/assets";
+import { useContext } from "react";
+import { AppContext } from "../../context/appContext";
+import toast from "react-hot-toast";
 
 export default function Layout() {
     const sidebarLinks = [
@@ -10,6 +13,24 @@ export default function Layout() {
         { name: "product list", path: "/seller/product-list", icon: <LuListCheck /> },
         { name: "orders", path: "/seller/orders", icon: <AiOutlineDeliveredProcedure /> },
     ];
+
+    const { axios, setIsSeller, navigate } = useContext(AppContext)
+
+    const logout = async () => {
+        try {
+            const { data } = await axios.post('/api/seller/logout')
+            if (data.success) {
+                toast.success(data.message)
+                navigate('/')
+            }
+            else {
+                toast.error(data.message)
+            }
+        }
+        catch (err) {
+            toast.error(err.message)
+        }
+    }
 
     return (
         <>
@@ -19,7 +40,7 @@ export default function Layout() {
                 </Link>
                 <div className="flex items-center gap-5 text-gray-500">
                     <p>Hi! Admin</p>
-                    <button className='border rounded-full text-sm px-4 py-1'>Logout</button>
+                    <button onClick={logout} className='border rounded-full text-sm px-4 py-1'>Logout</button>
                 </div>
             </div>
 
@@ -27,7 +48,7 @@ export default function Layout() {
                 <div className="md:w-64 w-16 border-r h-[550px] text-base border-gray-300 pt-4 flex flex-col">
                     {sidebarLinks.map((item, index) => (
                         <NavLink to={item.path} key={index} end={item.path === "/seller"}
-                            className={({isActive}) => `flex items-center py-3 px-4 gap-3 
+                            className={({ isActive }) => `flex items-center py-3 px-4 gap-3 
                             ${isActive ? "border-r-4 md:border-r-[6px] bg-primary/10 border-text-primary text-primary"
                                     : "hover:bg-gray-100/90 border-white0"
                                 }`
@@ -38,7 +59,7 @@ export default function Layout() {
                         </NavLink>
                     ))}
                 </div>
-                <Outlet/>
+                <Outlet />
             </div>
         </>
     )
