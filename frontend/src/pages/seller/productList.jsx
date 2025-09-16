@@ -1,6 +1,25 @@
-import { dummyProducts as products } from "../../assets/assets"
+import { useContext, useEffect } from "react"
+import { AppContext } from "../../context/appContext"
+import toast from "react-hot-toast"
 
 export default function ProductList() {
+    const { products, getProducts, axios } = useContext(AppContext)
+    const toggleStock = async (id, inStock) => {
+        try {
+            const { data } = await axios.post('/api/product/stock', { id, inStock })
+            if (data.success) {
+                getProducts()
+                toast.success(data.message)
+            }
+            else {
+                toast.error(data.message)
+            }
+        }
+        catch (err) {
+            toast.error(err.message)
+        }
+    }
+
     return (
         <div className="flex-1 py-10 flex flex-col justify-between">
             <div className="w-full md:p-10 p-4">
@@ -25,10 +44,10 @@ export default function ProductList() {
                                         <span className="truncate max-sm:hidden w-full">{product.name}</span>
                                     </td>
                                     <td className="px-4 py-3">{product.category}</td>
-                                    <td className="px-4 py-3 max-sm:hidden">${product.offerPrice}</td>
+                                    <td className="px-4 py-3 max-sm:hidden">${product.offPrice}</td>
                                     <td className="px-4 py-3">
                                         <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
-                                            <input type="checkbox" className="sr-only peer" defaultChecked={product.inStock} />
+                                            <input onClick={() => toggleStock(product._id, !product.inStock)} type="checkbox" className="sr-only peer" defaultChecked={product.inStock} />
                                             <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200"></div>
                                             <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
                                         </label>

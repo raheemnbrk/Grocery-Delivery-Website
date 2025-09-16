@@ -6,9 +6,6 @@ import { AppContext } from "../context/appContext"
 export default function AllProducts() {
     const {products , getProducts} = useContext(AppContext)
 
-    useEffect(()=>{
-        getProducts()
-    } , [products])
     return (
         <div className="flex flex-col gap-8" >
             <div className="items-end flex flex-col w-max" >

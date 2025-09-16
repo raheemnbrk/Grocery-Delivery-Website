@@ -2,15 +2,27 @@ import { useContext, useState } from "react"
 import { Link } from 'react-router-dom'
 import { assets } from "../assets/assets"
 import { AppContext } from "../context/appContext"
+import toast from "react-hot-toast"
 
 export default function NavBar() {
     const [open, setOpen] = useState(false)
-    const [logged, setLogged] = useState(!false)
-    const { setShowUserLogin, navigate } = useContext(AppContext)
+    const { setShowUserLogin, navigate, user, setUser, axios } = useContext(AppContext)
 
     const logOut = async () => {
-        setLogged(false)
-        navigate('/')
+        try {
+            const { data } = await axios.post('/api/user/logout')
+            if (data.success) {
+                toast.success(data.message)
+                setUser(null)
+                navigate('/')
+            }
+            else {
+                toast.error(data.message)
+            }
+        }
+        catch (err) {
+            toast.error(err.message)
+        }
     }
 
     return (
@@ -37,7 +49,7 @@ export default function NavBar() {
                 </Link>
 
                 {
-                    !logged ? (
+                    !user ? (
                         <button onClick={() => setShowUserLogin(true)} className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full">
                             login
                         </button>
@@ -60,10 +72,10 @@ export default function NavBar() {
             <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden z-40`}>
                 <Link to={"/"} onClick={() => setOpen(false)} className="block">Home</Link>
                 <Link to={"products"} onClick={() => setOpen(false)} className="block">All Products</Link>
-                {logged && (<Link to={"orders"} onClick={() => setOpen(false)} className="block">My Orders</Link>)}
+                {user && (<Link to={"orders"} onClick={() => setOpen(false)} className="block">My Orders</Link>)}
                 <Link to={"contact"} onClick={() => setOpen(false)} className="block">Contact</Link>
                 {
-                    !logged ?
+                    !user ?
                         (<button onClick={() => {
                             setOpen(false)
                             setShowUserLogin(true)

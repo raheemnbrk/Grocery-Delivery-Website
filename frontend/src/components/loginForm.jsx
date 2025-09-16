@@ -1,5 +1,6 @@
-import { useContext , useState } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../context/appContext";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
     const [state, setState] = useState("login");
@@ -7,11 +8,30 @@ export default function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const { showUserLogin, setShowUserLogin } = useContext(AppContext)
+    const { setShowUserLogin, axios , navigate , setUser } = useContext(AppContext)
 
-    return  (
-        <div onClick={()=>setShowUserLogin(false)} className="fixed top-0 bottom-0 right-0 left-0 z-30 flex items-center text-sm text-gray-600 bg-black/50" >
-            <form onClick={(e)=> e.stopPropagation()} className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] text-gray-500 rounded-lg shadow-xl border border-gray-200 bg-white">
+    const onSubmitHandler = async (e) => {
+        e.preventDefault()
+        setShowUserLogin(false)
+        try {
+            const { data } = await axios.post(`/api/user/${state}` , {name , email , password})
+            if(data.success){
+                navigate('/')
+                setUser(data.user)
+                setShowUserLogin(false)
+            }
+            else{
+                toast.error(data.message)
+            }
+        }
+        catch (err) {
+            toast.error(err.message)
+        }
+    }
+
+    return (
+        <div onClick={() => setShowUserLogin(false)} className="fixed top-0 bottom-0 right-0 left-0 z-30 flex items-center text-sm text-gray-600 bg-black/50" >
+            <form onClick={(e) => e.stopPropagation()} onSubmit={onSubmitHandler}  className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] text-gray-500 rounded-lg shadow-xl border border-gray-200 bg-white">
                 <p className="text-2xl font-medium m-auto">
                     <span className="text-primary">User</span> {state === "login" ? "Login" : "Sign Up"}
                 </p>

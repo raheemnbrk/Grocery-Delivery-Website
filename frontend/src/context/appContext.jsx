@@ -17,6 +17,7 @@ export const AppContextProvider = ({ children }) => {
   const [products , setProducts] = useState([])
   const [cartItems, setCartItems] = useState({})
   const [isSeller, setIsSeller] = useState(false)
+  const [user , setUser] = useState(null)
 
   const getProducts = async () => {
     try {
@@ -79,8 +80,23 @@ export const AppContextProvider = ({ children }) => {
     }
   }
 
+  const fetchUser = async()=>{
+    try{
+const {data} = await axios.get('/api/user/isAuth')
+if(data.success){
+  setUser(data.user)
+  setCartItems(data.user.cartItems)
+}
+    }
+    catch(err){
+      toast(err.message)
+    }
+  }
+
   useEffect(() => {
     fetchSeller()
+    getProducts()
+    fetchUser()
   }, [])
 
   const navigate = useNavigate()
@@ -91,7 +107,7 @@ export const AppContextProvider = ({ children }) => {
     cartItems, setCartItems,
     addToCart, updateCart, removeFromcart,
     products , getProducts, categories,
-    isSeller, setIsSeller, axios
+    isSeller, setIsSeller, axios , user , setUser
   }
   return <AppContext.Provider value={value} >
     {children}

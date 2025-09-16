@@ -73,7 +73,7 @@ const login = async (req, res) => {
 
 const isAuth = async (req, res) => {
     try {
-        const { userId } = req.body
+        const { userId } = req
         const user = await User.findById(userId).select("-password")
         res.json({ success: true, user })
     }
