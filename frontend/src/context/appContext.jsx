@@ -14,18 +14,18 @@ export const AppContext = createContext()
 
 export const AppContextProvider = ({ children }) => {
   const [showUserLogin, setShowUserLogin] = useState(false)
-  const [products , setProducts] = useState([])
-  const [cartItems, setCartItems] = useState({})
+  const [products, setProducts] = useState([])
+  const [cartItems, setCartItems] = useState([])
   const [isSeller, setIsSeller] = useState(false)
-  const [user , setUser] = useState(null)
+  const [user, setUser] = useState(null)
 
   const getProducts = async () => {
     try {
       const { data } = await axios.get('/api/product/productList')
       if (data.success) {
-         setProducts(data.products) 
+        setProducts(data.products)
       }
-      else{
+      else {
         toast.err(err.message)
       }
     }
@@ -35,34 +35,46 @@ export const AppContextProvider = ({ children }) => {
   }
 
   const addToCart = (itemId) => {
-    let cartData = structuredClone(cartItems)
-    if (cartData[itemId]) {
-      cartData[itemId] += 1
+    let cartData = [...cartItems]
+    const existingItem = cartData.find(item => item.product === itemId);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cartData.push({ product: itemId, quantity: 1 });
     }
-    else {
-      cartData[itemId] = 1
-    }
-    setCartItems(cartData)
-    toast.success("added to cart")
+
+    setCartItems(cartData);
+    toast.success("Added to cart")
   }
 
   const updateCart = (itemId, quantity) => {
-    let cartData = structuredClone(cartItems)
-    cartData[itemId] = quantity
-    setCartItems(cartData)
-    toast.success("added to cart")
+    let cartData = [...cartItems];
+
+    const existingItem = cartData.find(item => item.product === itemId);
+    if (existingItem) {
+      existingItem.quantity = quantity;
+    }
+
+    setCartItems(cartData);
+    toast.success("Cart updated");
   }
 
-  const removeFromcart = (itemId) => {
-    let cartData = structuredClone(cartItems)
-    if (cartData[itemId]) {
-      cartData[itemId] -= 1
-      if (cartData[itemId] === 0) {
-        delete cartData[itemId]
+  const removeFromCart = (itemId) => {
+    let cartData = [...cartItems];
+
+    const existingItemIndex = cartData.findIndex(item => item.product === itemId);
+
+    if (existingItemIndex !== -1) {
+      if (cartData[existingItemIndex].quantity > 1) {
+        cartData[existingItemIndex].quantity -= 1
+      } else {
+        cartData.splice(existingItemIndex, 1)
       }
     }
+
     setCartItems(cartData)
-    toast.success("removed from cart.")
+    toast.success("Removed from cart")
   }
 
   const fetchSeller = async () => {
@@ -80,15 +92,15 @@ export const AppContextProvider = ({ children }) => {
     }
   }
 
-  const fetchUser = async()=>{
-    try{
-const {data} = await axios.get('/api/user/isAuth')
-if(data.success){
-  setUser(data.user)
-  setCartItems(data.user.cartItems)
-}
+  const fetchUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/isAuth')
+      if (data.success) {
+        setUser(data.user)
+        setCartItems(data.user.cartItems)
+      }
     }
-    catch(err){
+    catch (err) {
       toast(err.message)
     }
   }
@@ -99,15 +111,32 @@ if(data.success){
     fetchUser()
   }, [])
 
+  useEffect(() => {
+    const syncCart = async () => {
+      try {
+        const { data } = await axios.post('/api/cart/update', { cartItems })
+        if (!data.success) {
+          toast.error(data.message)
+        }
+      } catch (err) {
+        toast.error(err.message)
+      }
+    }
+
+    if (user) {
+      syncCart()
+    }
+  }, [cartItems])
+
   const navigate = useNavigate()
   const value = {
     showUserLogin,
     setShowUserLogin,
     navigate,
     cartItems, setCartItems,
-    addToCart, updateCart, removeFromcart,
-    products , getProducts, categories,
-    isSeller, setIsSeller, axios , user , setUser
+    addToCart, updateCart, removeFromCart,
+    products, getProducts, categories,
+    isSeller, setIsSeller, axios, user, setUser
   }
   return <AppContext.Provider value={value} >
     {children}

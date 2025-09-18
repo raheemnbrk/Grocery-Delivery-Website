@@ -52,7 +52,7 @@ export default function Product() {
 
                     <div className="mt-6">
                         <p className="text-gray-500/70 line-through">MRP: ${product.price}</p>
-                        <p className="text-2xl font-medium">MRP: ${product.offerPrice}</p>
+                        <p className="text-2xl font-medium">MRP: ${product.offPrice}</p>
                         <span className="text-gray-500/70">(inclusive of all taxes)</span>
                     </div>
 

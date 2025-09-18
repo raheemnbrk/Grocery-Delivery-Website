@@ -1,8 +1,10 @@
+import { useContext } from "react";
 import ProductsCard from "./productsCard";
-import { dummyProducts as products } from "../assets/assets";
 import { Link } from "react-router-dom";
+import { AppContext } from "../context/appContext";
 
 export default function BestSeller() {
+    const {products} = useContext(AppContext)
     return (
         <div className="flex flex-col space-y-6" >
             <p className="text-2xl md:text-3xl text-gray-700 font-medium capitalize" >best sellers</p>

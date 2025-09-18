@@ -76,7 +76,7 @@ export default function AddProduct() {
                     <label className="text-base font-medium text-gray-600" htmlFor="category">Category</label>
                     <select id="category" onChange={(e) => setCategory(e.target.value)} className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 text-gray-600">
                         <option value="">Select Category</option>
-                        {[{ name: 'Organic vagies' }, { name: 'Fresh Fruits' }, { name: 'Cold Drinks' }, { name: 'Instant Food' }, { name: 'Dairy Products' }, { name: 'Bakery & Breads' }, { name: 'Grains & Cerials' }].map((item, index) => (
+                        {[{ name: 'Vegetables' }, { name: 'Fruits' }, { name: 'Drinks' }, { name: 'Instant' }, { name: 'Dairy' }, { name: 'Bakery' }, { name: 'Grains ' }].map((item, index) => (
                             <option key={index} value={item.name}>{item.name}</option>
                         ))}
                     </select>
