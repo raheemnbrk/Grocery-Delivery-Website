@@ -2,8 +2,9 @@ import Address from "../models/address.mjs"
 
 const addAddress = async (req, res) => {
     try {
-        const { userId, addressData } = req.body
-        await Address.create({ ...addressData })
+        const { addressData } = req.body
+        const { userId } = req
+        await Address.create({ ...addressData , userId })
         res.json({ success: true, message: "address added successfully." })
     }
     catch (err) {
@@ -14,8 +15,8 @@ const addAddress = async (req, res) => {
 
 const getAddress = async (req, res) => {
     try {
-        const { userId } = req.body
-        const addresses = await Address.find({userId})
+        const { userId } = req
+        const addresses = await Address.find({ userId })
         res.json({ success: true, addresses })
     }
     catch (err) {
@@ -25,5 +26,5 @@ const getAddress = async (req, res) => {
 }
 
 export {
-    addAddress , getAddress
+    addAddress, getAddress
 }

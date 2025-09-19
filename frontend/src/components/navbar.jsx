@@ -72,7 +72,7 @@ export default function NavBar() {
             <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden z-40`}>
                 <Link to={"/"} onClick={() => setOpen(false)} className="block">Home</Link>
                 <Link to={"products"} onClick={() => setOpen(false)} className="block">All Products</Link>
-                {user && (<Link to={"orders"} onClick={() => setOpen(false)} className="block">My Orders</Link>)}
+                {user && (<Link to={"myOrders"} onClick={() => setOpen(false)} className="block">My Orders</Link>)}
                 <Link to={"contact"} onClick={() => setOpen(false)} className="block">Contact</Link>
                 {
                     !user ?
