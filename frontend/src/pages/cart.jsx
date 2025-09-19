@@ -6,7 +6,7 @@ import { FaArrowLeft } from "react-icons/fa6"
 import toast from "react-hot-toast"
 
 export default function Cart() {
-    const { cartItems, removeFromCart, products, updateCart, axios, user, setCartItems , navigate } = useContext(AppContext)
+    const { cartItems, removeFromCart, products, updateCart, axios, user, setCartItems , navigate , getCartCount } = useContext(AppContext)
     const [showAddress, setShowAddress] = useState(false)
     const [addresses, setAddresses] = useState([])
     const [selectedAddress, setSelectedAddress] = useState(null)
@@ -77,7 +77,7 @@ export default function Cart() {
         <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 mx-auto">
             <div className="flex-1 max-w-4xl">
                 <h1 className="text-3xl font-medium mb-6">
-                    Shopping Cart <span className="text-sm text-primary">{cartArray.length} Items</span>
+                    Shopping Cart <span className="text-sm text-primary">{getCartCount()} Items</span>
                 </h1>
 
                 <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 text-base font-medium pb-3">
@@ -183,7 +183,7 @@ export default function Cart() {
                     </div>
 
                     <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
-                    <select onChange={(e)=>e.target.value} className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none">
+                    <select onChange={(e)=>setPaymentOption(e.target.value)} className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none">
                         <option value="COD">Cash On Delivery</option>
                         <option value="Online">Online Payment</option>
                     </select>

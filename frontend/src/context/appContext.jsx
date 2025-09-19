@@ -128,6 +128,10 @@ export const AppContextProvider = ({ children }) => {
     }
   }, [cartItems])
 
+  const getCartCount = () => {
+  return cartItems.reduce((total, item) => total + item.quantity, 0);
+}
+
   const navigate = useNavigate()
   const value = {
     showUserLogin,
@@ -136,7 +140,8 @@ export const AppContextProvider = ({ children }) => {
     cartItems, setCartItems,
     addToCart, updateCart, removeFromCart,
     products, getProducts, categories,
-    isSeller, setIsSeller, axios, user, setUser
+    isSeller, setIsSeller, axios, user, setUser , 
+    getCartCount
   }
   return <AppContext.Provider value={value} >
     {children}

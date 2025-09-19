@@ -6,7 +6,7 @@ import toast from "react-hot-toast"
 
 export default function NavBar() {
     const [open, setOpen] = useState(false)
-    const { setShowUserLogin, navigate, user, setUser, axios } = useContext(AppContext)
+    const { setShowUserLogin, navigate, user, setUser, axios , getCartCount } = useContext(AppContext)
 
     const logOut = async () => {
         try {
@@ -44,7 +44,7 @@ export default function NavBar() {
                 <Link to={"cart"} >
                     <div className="relative cursor-pointer">
                         <img src={assets.cart_icon} alt="cart" className="w-6 opacity-80" />
-                        <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">3</button>
+                        <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">{getCartCount()}</button>
                     </div>
                 </Link>
 
@@ -57,7 +57,7 @@ export default function NavBar() {
                         <div className="relative group cursor-pointer" >
                             <img src={assets.profile_icon} alt="profile" className="w-8" />
                             <ul className="hidden group-hover:block absolute top-8 left-0 right-0 shadow bg-white z-40 border border-gray-200 py-2.5 w-30 rounded-md text-sm transition-all duration-300 " >
-                                <Link to={"orders"} ><li className="capitalize py-1.5 px-4 w-full cursor-pointer hover:bg-primary/10" >my orders</li></Link>
+                                <Link to={"myOrders"} ><li className="capitalize py-1.5 px-4 w-full cursor-pointer hover:bg-primary/10" >my orders</li></Link>
                                 <li onClick={logOut} className="capitalize py-1.5 px-4 w-full cursor-pointer hover:bg-primary/10" >logout</li>
                             </ul>
                         </div>
