@@ -1,7 +1,29 @@
-import { dummyOrders as orders } from "../../assets/assets"
+import { useContext, useEffect, useState } from "react"
+import { AppContext } from "../../context/appContext"
+import toast from "react-hot-toast"
 
 export default function Orders() {
+    const { axios } = useContext(AppContext)
     const boxIcon = "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/e-commerce/boxIcon.svg"
+    const [orders, setOrders] = useState([])
+
+    const fetchOrders = async () => {
+        try {
+            const { data } = await axios.get('/api/order/seller')
+            if (data.success) {
+                setOrders(data.orders)
+            }
+            else {
+                toast.error(data.message)
+            }
+        }
+        catch (err) {
+            toast.error(err.message)
+        }
+    }
+    useEffect(() => {
+        fetchOrders()
+    }, [])
     return (
         <div className="md:p-10 p-4 space-y-4">
             <h2 className="text-lg font-medium">Orders List</h2>
