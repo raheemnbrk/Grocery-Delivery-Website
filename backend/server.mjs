@@ -17,7 +17,7 @@ const app = express()
 
 const port = process.env.PORT || 4000
 
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['http://localhost:5173' , 'https://grocery-delivery-website-on2d.vercel.app'];
 
 app.use(express.json())
 app.use(cookieParser())
