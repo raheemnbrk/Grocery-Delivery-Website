@@ -25,8 +25,8 @@ const register = async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+            secure: true,
+            sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
@@ -58,9 +58,9 @@ const login = async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-            secure: process.env.NODE_ENV === "production"
+            secure: true,
+            sameSite: "none",
+            maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
         res.json({ success: true, user: { email: user.email, name: user.name } })
@@ -73,8 +73,12 @@ const login = async (req, res) => {
 
 const isAuth = async (req, res) => {
     try {
-        const { userId } = req
-        const user = await User.findById(userId).select("-password")
+        const token = req.cookies.token
+        if (!token) {
+            return res.json({ success: false, message: "not authenticated" })
+        }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
+        const user = await User.findById(decoded.id).select("-password")
         res.json({ success: true, user })
     }
     catch (err) {
@@ -87,16 +91,15 @@ const logout = async (req, res) => {
     try {
         res.clearCookie('token', {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict"
+            secure: true,
+            sameSite: "none"
         })
-        res.json({success : true , message : "LoggedOut"})
+        res.json({ success : true , message : "LoggedOut" })
     }
     catch (err) {
         console.log(err)
         res.json({ success: false, message: err.message })
     }
 }
-
 
 export { register, login , isAuth , logout }
