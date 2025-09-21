@@ -6,7 +6,7 @@ import { FaArrowLeft } from "react-icons/fa6"
 import toast from "react-hot-toast"
 
 export default function Cart() {
-    const { cartItems, removeFromCart, products, updateCart, axios, user, setCartItems , navigate , getCartCount } = useContext(AppContext)
+    const { cartItems, removeFromCart, products, updateCart, axios, user, setCartItems, navigate, getCartCount } = useContext(AppContext)
     const [showAddress, setShowAddress] = useState(false)
     const [addresses, setAddresses] = useState([])
     const [selectedAddress, setSelectedAddress] = useState(null)
@@ -63,8 +63,22 @@ export default function Cart() {
                     toast.error(data.message)
                 }
             }
+            else {
+                const { data } = await axios.post('/api/order/stripe',
+                    {
+                        items: cartArray.map(item => ({ product: item._id, quantity: item.quantity })),
+                        address: selectedAddress._id
+                    }
+                )
+                if (data.success) {
+                   window.location.replace(data.url)
+                }
+                else {
+                    toast.error(data.message)
+                }
+            }
         }
-        catch(err){
+        catch (err) {
             toast.error(err.message)
         }
     }
@@ -183,7 +197,7 @@ export default function Cart() {
                     </div>
 
                     <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
-                    <select onChange={(e)=>setPaymentOption(e.target.value)} className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none">
+                    <select onChange={(e) => setPaymentOption(e.target.value)} className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none">
                         <option value="COD">Cash On Delivery</option>
                         <option value="Online">Online Payment</option>
                     </select>
@@ -206,7 +220,7 @@ export default function Cart() {
                     </p>
                 </div>
 
-                <button onClick={placeOrder} className="w-full py-3 mt-6 cursor-pointer bg-primary text-white font-medium hover:bg-primary/80 transition" > 
+                <button onClick={placeOrder} className="w-full py-3 mt-6 cursor-pointer bg-primary text-white font-medium hover:bg-primary/80 transition" >
                     Place Order
                 </button>
             </div>

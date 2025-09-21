@@ -11,6 +11,7 @@ import productRouter from "./routes/productRoute.mjs"
 import cartRouter from "./routes/cartRoute.mjs"
 import addressRouter from "./routes/addressRoute.mjs"
 import orderRouter from "./routes/orderRoute.mjs"
+import { stripeWebHook } from "./controllers/ordersController.mjs"
 
 const app = express()
 
@@ -27,6 +28,8 @@ app.use(cors({
 
 await connectDb()
 await connectCloudinary()
+
+app.post('/stripe' , express.raw({type: "application.json"}) , stripeWebHook)
 
 app.get("/", (req, res) => {
     res.send("api is working")
